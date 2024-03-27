@@ -16,6 +16,8 @@ import { registerFormPayload } from "@/utls/registerFormPayload";
 import { registerPatient } from "@/services/actions/registerPatient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { loginUser } from "@/services/actions/loginUser";
+import { storeAuthUserInfo } from "@/services/stores/auth-services";
 interface IPatientData {
   name: string;
   email: string;
@@ -32,7 +34,6 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<IPatientRegisterForm>();
 
@@ -45,10 +46,18 @@ const RegisterPage = () => {
 
       if (res?.data?.id) {
         toast.success(res?.message);
-        router.push("/login");
+      }
+
+      const result = await loginUser({
+        email: data.patient.email,
+        password: data.password,
+      });
+      if (result?.data?.accessToken) {
+        storeAuthUserInfo({ accessToken: result?.data?.accessToken });
+        router.push("/");
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
   return (

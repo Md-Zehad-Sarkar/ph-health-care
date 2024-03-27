@@ -14,6 +14,8 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { loginUser } from "@/services/actions/loginUser";
 import { storeAuthUserInfo } from "@/services/stores/auth-services";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 export type TLoginUser = {
   email: string;
   password: string;
@@ -26,15 +28,18 @@ const LoginPage = () => {
     watch,
     formState: { errors },
   } = useForm<TLoginUser>();
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<TLoginUser> = async (data) => {
     try {
       const res = await loginUser(data);
       if (res?.data?.accessToken) {
         storeAuthUserInfo({ accessToken: res?.data?.accessToken });
+        router.push("/");
+        toast.success(res.message);
       }
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
   return (
