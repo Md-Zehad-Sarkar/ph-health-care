@@ -1,13 +1,5 @@
 "use client";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
@@ -72,6 +64,7 @@ const LoginPage = () => {
                     type="email"
                     label="Email"
                     fullWidth={true}
+                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -80,6 +73,7 @@ const LoginPage = () => {
                     type="password"
                     label="Password"
                     fullWidth={true}
+                    required={true}
                   />
                 </Grid>
               </Grid>

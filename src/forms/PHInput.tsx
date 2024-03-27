@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { SxProps, TextField } from "@mui/material";
 import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -9,6 +9,9 @@ type TPHInputProps = {
   variant?: "outlined" | "standard" | "filled";
   size?: "small" | "medium";
   fullWidth: boolean;
+  sx?: SxProps;
+  placeholder?: string;
+  required: boolean;
 };
 
 const PHInput = ({
@@ -18,6 +21,9 @@ const PHInput = ({
   variant = "outlined",
   size = "small",
   fullWidth = false,
+  placeholder,
+  required,
+  sx,
 }: TPHInputProps) => {
   const { control } = useFormContext();
   return (
@@ -32,6 +38,9 @@ const PHInput = ({
           variant={variant}
           size={size}
           fullWidth={fullWidth}
+          required={required}
+          placeholder={label}
+          sx={sx}
         />
       )}
     />
