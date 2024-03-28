@@ -14,6 +14,7 @@ import PHForm from "@/forms/PHForm";
 import PHInput from "@/forms/PHInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 // interface IPatientData {
 //   name: string;
 //   email: string;
@@ -31,16 +32,22 @@ const registerUserValidationSchema = z.object({
   patient: z.object({
     name: z.string().min(2, { message: "name is required" }),
     email: z.string().email("please type valid email"),
-    contactNumber: z
-      .string()
-      .min(11, { message: "input a valid number" })
-      .max(11, { message: "input a valid number" }),
+    contactNumber: z.string().regex(/^\d{11}$/, "provide a valid number"),
     address: z.string().min(2, { message: "please give your address" }),
   }),
 });
 
+const defaultValues = {
+  "patient.name": "",
+  "patient.email": "",
+  password: "",
+  "patient.contactNumber": "",
+  "patient.address": "",
+};
+
 const RegisterPage = () => {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async (data: FieldValues) => {
     const userData = registerFormPayload(data);
@@ -49,12 +56,15 @@ const RegisterPage = () => {
 
       if (res?.data?.id) {
         toast.success(res?.message);
+      } else {
+        setErrorMessage(res?.message);
       }
 
       const result = await loginUser({
         email: data.patient.email,
         password: data.password,
       });
+
       if (result?.data?.accessToken) {
         storeAuthUserInfo({ accessToken: result?.data?.accessToken });
         router.push("/");
@@ -92,17 +102,16 @@ const RegisterPage = () => {
               <Typography>Patient Register</Typography>
             </Box>
           </Stack>
+          {errorMessage && (
+            <Box sx={{ backgroundColor: "red", color: "white", textAlign:'center'}}>
+              <Typography>{errorMessage}</Typography>
+            </Box>
+          )}
           <Box>
             <PHForm
               onSubmit={onSubmit}
               resolver={zodResolver(registerUserValidationSchema)}
-              defaultValues={{
-                "patient.name": "",
-                "patient.email": "",
-                password: "",
-                "patient.contactNumber": "",
-                "patient.address": "",
-              }}
+              defaultValues={defaultValues}
             >
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
