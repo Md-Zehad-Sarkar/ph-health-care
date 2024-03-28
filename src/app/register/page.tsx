@@ -12,17 +12,32 @@ import { loginUser } from "@/services/actions/loginUser";
 import { storeAuthUserInfo } from "@/services/stores/auth-services";
 import PHForm from "@/forms/PHForm";
 import PHInput from "@/forms/PHInput";
-interface IPatientData {
-  name: string;
-  email: string;
-  contactNumber: string;
-  address: string;
-}
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+// interface IPatientData {
+//   name: string;
+//   email: string;
+//   contactNumber: string;
+//   address: string;
+// }
 
-interface IPatientRegisterForm {
-  password: string;
-  patient: IPatientData;
-}
+// interface IPatientRegisterForm {
+//   password: string;
+//   patient: IPatientData;
+// }
+
+const registerUserValidationSchema = z.object({
+  password: z.string().min(6, { message: "password minimum 6 character" }),
+  patient: z.object({
+    name: z.string().min(2, { message: "name is required" }),
+    email: z.string().email("please type valid email"),
+    contactNumber: z
+      .string()
+      .min(11, { message: "input a valid number" })
+      .max(11, { message: "input a valid number" }),
+    address: z.string().min(2, { message: "please give your address" }),
+  }),
+});
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -78,14 +93,23 @@ const RegisterPage = () => {
             </Box>
           </Stack>
           <Box>
-            <PHForm onSubmit={onSubmit}>
+            <PHForm
+              onSubmit={onSubmit}
+              resolver={zodResolver(registerUserValidationSchema)}
+              defaultValues={{
+                "patient.name": "",
+                "patient.email": "",
+                password: "",
+                "patient.contactNumber": "",
+                "patient.address": "",
+              }}
+            >
               <Grid container spacing={2} my={1}>
                 <Grid item md={12}>
                   <PHInput
                     type="text"
                     label="Name"
                     fullWidth={true}
-                    required={true}
                     name="patient.name"
                   />
                 </Grid>
@@ -94,7 +118,6 @@ const RegisterPage = () => {
                     type="email"
                     label="Email"
                     fullWidth={true}
-                    required={true}
                     name="patient.email"
                   />
                 </Grid>
@@ -103,7 +126,6 @@ const RegisterPage = () => {
                     type="password"
                     label="Password"
                     fullWidth={true}
-                    required={true}
                     name="password"
                   />
                 </Grid>
@@ -113,7 +135,6 @@ const RegisterPage = () => {
                     label="Contact no"
                     fullWidth={true}
                     name="patient.contactNumber"
-                    required={true}
                   />
                 </Grid>
                 <Grid item md={6}>
@@ -122,7 +143,6 @@ const RegisterPage = () => {
                     label="Address"
                     fullWidth={true}
                     name="patient.address"
-                    required={true}
                   />
                 </Grid>
               </Grid>

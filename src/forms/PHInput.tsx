@@ -11,7 +11,7 @@ type TPHInputProps = {
   fullWidth: boolean;
   sx?: SxProps;
   placeholder?: string;
-  required: boolean;
+  required?: boolean;
 };
 
 const PHInput = ({
@@ -21,7 +21,6 @@ const PHInput = ({
   variant = "outlined",
   size = "small",
   fullWidth = false,
-  placeholder,
   required,
   sx,
 }: TPHInputProps) => {
@@ -30,7 +29,7 @@ const PHInput = ({
     <Controller
       control={control}
       name={name}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <TextField
           {...field}
           label={label}
@@ -41,6 +40,8 @@ const PHInput = ({
           required={required}
           placeholder={label}
           sx={sx}
+          error={!!error?.message}
+          helperText={error?.message}
         />
       )}
     />
