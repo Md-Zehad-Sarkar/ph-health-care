@@ -1,37 +1,20 @@
-import {
-  Box,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Stack,
-  Typography,
-} from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import { Box, List, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
+import { drawerMenuItems } from "@/utls/drawerMenuItems";
+import { TUserRole } from "@/types";
+import SidebarItem from "./SidebarItem";
+import { useEffect, useState } from "react";
+import { getAuthUserInfo } from "@/services/stores/auth-services";
 
 const SideBar = () => {
-  const drawer = (
-    <div>
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+  const [userRole, setUserRole] = useState("");
+  useEffect(() => {
+    const { role } = getAuthUserInfo();
+    setUserRole(role);
+  }, []);
+
   return (
     <Box>
       <Stack
@@ -49,7 +32,13 @@ const SideBar = () => {
           PH Health Care
         </Typography>
       </Stack>
-      {drawer}
+      <Box>
+        <List>
+          {drawerMenuItems(userRole as TUserRole).map((item, index) => (
+            <SidebarItem key={index}  item={item} />
+          ))}
+        </List>
+      </Box>
     </Box>
   );
 };

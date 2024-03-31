@@ -15,17 +15,6 @@ import PHInput from "@/forms/PHInput";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-// interface IPatientData {
-//   name: string;
-//   email: string;
-//   contactNumber: string;
-//   address: string;
-// }
-
-// interface IPatientRegisterForm {
-//   password: string;
-//   patient: IPatientData;
-// }
 
 const registerUserValidationSchema = z.object({
   password: z.string().min(6, { message: "password minimum 6 character" }),
@@ -67,7 +56,7 @@ const RegisterPage = () => {
 
       if (result?.data?.accessToken) {
         storeAuthUserInfo({ accessToken: result?.data?.accessToken });
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (error: any) {
       console.error(error.message);
@@ -103,7 +92,13 @@ const RegisterPage = () => {
             </Box>
           </Stack>
           {errorMessage && (
-            <Box sx={{ backgroundColor: "red", color: "white", textAlign:'center'}}>
+            <Box
+              sx={{
+                backgroundColor: "red",
+                color: "white",
+                textAlign: "center",
+              }}
+            >
               <Typography>{errorMessage}</Typography>
             </Box>
           )}

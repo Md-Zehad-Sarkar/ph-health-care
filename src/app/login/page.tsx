@@ -30,7 +30,7 @@ const LoginPage = () => {
       const res = await loginUser(data);
       if (res?.data?.accessToken) {
         storeAuthUserInfo({ accessToken: res?.data?.accessToken });
-        router.push("/");
+        router.push("/dashboard");
         toast.success(res.message);
       } else {
         setErrorMessage(res?.message);
@@ -70,9 +70,14 @@ const LoginPage = () => {
           </Stack>
           {errorMessage && (
             <Box
-              sx={{ bgcolor: "red",borderRadius:'10px', textAlign: "center", p: 1 }}
+              sx={{
+                bgcolor: "red",
+                borderRadius: "10px",
+                textAlign: "center",
+                p: 1,
+              }}
             >
-              <Typography sx={{color:'white'}}>{errorMessage}</Typography>
+              <Typography sx={{ color: "white" }}>{errorMessage}</Typography>
             </Box>
           )}
           <Box>

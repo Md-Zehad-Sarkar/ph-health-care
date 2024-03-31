@@ -33,7 +33,7 @@ export const drawerMenuItems = (role: TUserRole) => {
       roleMenus.push(
         {
           title: "Dashboard",
-          path: `${role}/admin`,
+          path: `${role}`,
           icon: DashboardIcon,
         },
         {
@@ -48,7 +48,7 @@ export const drawerMenuItems = (role: TUserRole) => {
         },
         {
           title: "Schedules",
-          path: `${role}/schedule`,
+          path: `${role}/schedules`,
           icon: CalendarMonthIcon,
         },
         {
@@ -74,7 +74,7 @@ export const drawerMenuItems = (role: TUserRole) => {
         },
         {
           title: "Schedules",
-          path: `${role}/schedule`,
+          path: `${role}/schedules`,
           icon: CalendarMonthIcon,
         },
         {
