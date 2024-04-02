@@ -24,10 +24,14 @@ const SpecialtiesPage = () => {
   const [deleteSpecialty] = useDeleteSpecialtyMutation();
 
   const handleDelete = async (id: string) => {
-    const res = await deleteSpecialty(id).unwrap();
+    try {
+      const res = await deleteSpecialty(id).unwrap();
 
-    if (res?.id) {
-      toast.success("Specialty Deleted Successfully");
+      if (res?.id) {
+        toast.success("Specialty Deleted Successfully");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
