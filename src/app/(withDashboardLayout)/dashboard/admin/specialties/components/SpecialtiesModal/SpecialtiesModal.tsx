@@ -1,19 +1,37 @@
+"use client";
 import PHModal from "@/components/shared/PHModal/PHModal";
 import PHFileUploader from "@/forms/PHFileUploader";
 import PHForm from "@/forms/PHForm";
 import PHInput from "@/forms/PHInput";
-import { Button, Grid, TextField } from "@mui/material";
-import { Dispatch } from "react";
+import { useCreateSpecialtyMutation } from "@/redux/api/specialtiesApi";
+import { modifyFormPayload } from "@/utls/modifyFormPayload";
+import { Button, Grid } from "@mui/material";
+
 import { FieldValues } from "react-hook-form";
+import { toast } from "sonner";
 type TSpecialtiesModalProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const SpecialtiesModal = ({ open, setOpen }: TSpecialtiesModalProps) => {
-  const handleCreateSpecialty = (values: FieldValues) => {
-    console.log(values);
+  const [createSpecialty] = useCreateSpecialtyMutation();
+
+  const handleCreateSpecialty = async (values: FieldValues) => {
+    const data = modifyFormPayload(values);
+
+    try {
+      const res = await createSpecialty(data).unwrap();
+
+      if (res?.id) {
+        toast.success("Specialty Create Successfully");
+        setOpen(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
+
   return (
     <PHModal open={open} setOpen={setOpen} title="Create Specialty">
       <PHForm onSubmit={handleCreateSpecialty}>
@@ -25,7 +43,9 @@ const SpecialtiesModal = ({ open, setOpen }: TSpecialtiesModalProps) => {
             <PHFileUploader name="file" label="File Upload" />
           </Grid>
         </Grid>
-        <Button type="submit" sx={{ mt: 1 }}>Create</Button>
+        <Button type="submit" sx={{ mt: 1 }}>
+          Create
+        </Button>
       </PHForm>
     </PHModal>
   );

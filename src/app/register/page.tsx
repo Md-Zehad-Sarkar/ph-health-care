@@ -4,7 +4,7 @@ import Image from "next/image";
 import assets from "@/assets";
 import Link from "next/link";
 import { FieldValues } from "react-hook-form";
-import { registerFormPayload } from "@/utls/registerFormPayload";
+import { modifyFormPayload } from "@/utls/modifyFormPayload";
 import { registerPatient } from "@/services/actions/registerPatient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,8 @@ const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const onSubmit = async (data: FieldValues) => {
-    const userData = registerFormPayload(data);
+    const userData = modifyFormPayload(data);
+
     try {
       const res = await registerPatient(userData);
 
