@@ -15,20 +15,21 @@ type TDoctorModalProps = {
 };
 
 const defaultValues = {
-  password: "",
   doctor: {
-    name: "John Doe",
-    email: "john@example.com",
-    contactNumber: "1234567890",
-    address: "123 Main Street",
-    registrationNumber: "123456",
-    experience: "5",
-    gender: "Male",
-    apointmentFee: "50",
-    qualification: "MBBS",
-    currentWorkingPlace: "Hospital ABC",
-    designation: "Doctor",
+    email: "",
+    name: "",
+    contactNumber: "",
+    address: "",
+    registrationNumber: "",
+    gender: "",
+    experience: 0,
+    apointmentFee: 0,
+    qualification: "",
+    currentWorkingPlace: "",
+    designation: "",
+    profilePhoto: "",
   },
+  password: "",
 };
 
 const DoctorsModal = ({ open, setOpen }: TDoctorModalProps) => {
@@ -51,7 +52,7 @@ const DoctorsModal = ({ open, setOpen }: TDoctorModalProps) => {
   };
   return (
     <PHFullScreenModal open={open} setOpen={setOpen}>
-      <PHForm onSubmit={handleCreateDoctor}>
+      <PHForm onSubmit={handleCreateDoctor} defaultValues={defaultValues}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={6} lg={4}>
             <PHInput
