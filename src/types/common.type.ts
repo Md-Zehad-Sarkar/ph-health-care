@@ -33,3 +33,5 @@ export type TGenericErrorResponse = {
   message: string;
   errorMessages?: TGenericErrorMessage[];
 };
+
+export type TGender = ["MALE", "FEMALE"];
