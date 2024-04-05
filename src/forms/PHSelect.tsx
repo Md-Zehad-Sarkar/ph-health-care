@@ -1,5 +1,4 @@
 import { MenuItem, SxProps, TextField } from "@mui/material";
-import React from "react";
 import { Controller, useFormContext } from "react-hook-form";
 type TPHSelectProps = {
   name: string;

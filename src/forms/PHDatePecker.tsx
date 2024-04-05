@@ -19,7 +19,7 @@ const PHDatePecker = ({
   size = "small",
   label,
   required,
-  fullWidth = false,
+  fullWidth = true,
   sx,
 }: TPHDatePeckerProps) => {
   const { control } = useFormContext();
@@ -34,6 +34,7 @@ const PHDatePecker = ({
             <DemoItem label="Create Schedule">
               <DesktopDatePicker
                 {...field}
+                label={label}
                 disablePast
                 timezone="system"
                 sx={{ ...sx }}
