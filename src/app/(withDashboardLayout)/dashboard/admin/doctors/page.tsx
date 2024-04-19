@@ -16,8 +16,10 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Image from "next/image";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { toast } from "sonner";
 import { useDebounced } from "@/redux/hooks";
+import Link from "next/link";
 
 const DoctorsPAge = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,14 +28,14 @@ const DoctorsPAge = () => {
 
   const [searchTerm, setSearchTerm] = useState<string>("");
 
-
-  //when we type for search this hook call for fetch api for a time 
+  //when we type for search this hook call for fetch api for a time
   const debouncedTerm = useDebounced({ searchQuery: searchTerm, delay: 1000 });
   if (!!debouncedTerm) {
     query["searchTerm"] = searchTerm;
   }
 
   const [deleteDoctor] = useDeleteDoctorMutation();
+
   const { data, isLoading } = useGetAllDoctorQuery({ ...query });
   const doctors = data?.doctors;
   const meta = data?.meta;
@@ -85,9 +87,19 @@ const DoctorsPAge = () => {
       headerName: "Action",
       renderCell: ({ row }) => {
         return (
-          <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
+          <Box>
+            <IconButton
+              onClick={() => handleDelete(row.id)}
+              aria-label="delete"
+            >
+              <DeleteIcon />
+            </IconButton>
+            <Link href={`/dashboard/admin/doctors/edit/${row.id}`}>
+              <IconButton aria-label="edit">
+                <EditIcon />
+              </IconButton>
+            </Link>
+          </Box>
         );
       },
     },
