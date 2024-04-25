@@ -61,11 +61,11 @@ export const drawerMenuItems = (role: TUserRole) => {
           path: `${role}/reviews`,
           icon: ReviewsIcon,
         },
-        {
-          title: "Profile",
-          path: `${role}/profile`,
-          icon: GroupIcon,
-        }
+        // {
+        //   title: "Profile",
+        //   path: `${role}/profile`,
+        //   icon: GroupIcon,
+        // }
       );
 
       break;

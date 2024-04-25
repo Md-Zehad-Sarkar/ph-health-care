@@ -9,7 +9,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create();
 axiosInstance.defaults.headers.post["Content-Type"] = "application/json";
-axiosInstance.defaults.headers["Access"] = "application/json";
+axiosInstance.defaults.headers["Accept"] = "application/json";
 axiosInstance.defaults.timeout = 60000;
 
 // Add a request interceptor
@@ -42,6 +42,7 @@ axiosInstance.interceptors.response.use(
     };
     return responseObject;
   },
+
   async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error

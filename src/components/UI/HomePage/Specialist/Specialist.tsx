@@ -48,7 +48,11 @@ const Specialist = async () => {
             >
               <Box>
                 <Image
-                  src={specialty?.icon}
+                  src={
+                    specialty?.icon
+                      ? specialty?.icon
+                      : "https://static.thenounproject.com/png/2714603-200.png"
+                  }
                   alt="icon"
                   width={100}
                   height={100}

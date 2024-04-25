@@ -46,7 +46,11 @@ const SpecialtiesPage = () => {
         return (
           <Box my={2}>
             <Image
-              src={row?.icon}
+              src={
+                row?.icon
+                  ? row?.icon
+                  : "https://static.thenounproject.com/png/2714603-200.png"
+              }
               alt="icon"
               width={20}
               height={20}
@@ -64,7 +68,7 @@ const SpecialtiesPage = () => {
       align: "center",
       renderCell: ({ row }) => {
         return (
-          <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+          <IconButton onClick={() => handleDelete(row?.id)} aria-label="delete">
             <DeleteIcon />
           </IconButton>
         );

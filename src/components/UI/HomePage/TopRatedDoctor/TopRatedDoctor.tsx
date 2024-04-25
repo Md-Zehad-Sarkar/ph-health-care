@@ -54,7 +54,11 @@ const TopRatedDoctor = async () => {
                <Card>
                  <Box>
                    <Image
-                     src={doctor.profilePhoto}
+                     src={
+                       doctor?.profilePhoto
+                         ? doctor?.profilePhoto
+                         : "https://static.thenounproject.com/png/2714603-200.png"
+                     }
                      alt="doctor"
                      width={500}
                      height={100}
@@ -65,10 +69,10 @@ const TopRatedDoctor = async () => {
                      {doctor.name}
                    </Typography>
                    <Typography variant="body2" color="text.secondary">
-                     {doctor.qualification}, {doctor.designation}
+                     {doctor.qualification}, {doctor?.designation}
                    </Typography>
                    <Typography variant="body2" color="text.secondary" mt={1}>
-                     <LocationOnIcon /> {doctor.address}
+                     <LocationOnIcon /> {doctor?.address}
                    </Typography>
                  </CardContent>
                  <CardActions
