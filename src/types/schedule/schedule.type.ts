@@ -1,3 +1,5 @@
+import React from "react";
+
 export type TSchedule = {
   id?: string;
   startDate: string;
@@ -9,4 +11,17 @@ export type TScheduleFrom = {
   endDate: Date;
   startTime: string;
   endTime: string;
+};
+
+export type TScheduleProps = {
+  id: string;
+  startDate: string;
+  endDate: string;
+  createdAt: string;
+  updatedAt: string;
+};
+export type TSchedulesPropsType = {
+  schedules: TScheduleProps[] | undefined;
+  selectedScheduleIds: string[];
+  setSelectedScheduleIds: React.Dispatch<React.SetStateAction<string[]>>;
 };
