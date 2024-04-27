@@ -10,6 +10,7 @@ import MultiSelectFieldChip from "./MultiSelectFieldChip";
 import { Box, Stack } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useCreateDoctorScheduleMutation } from "@/redux/api/doctorScheduleApi";
+import { toast } from "sonner";
 
 type TProps = {
   open: boolean;
@@ -44,7 +45,7 @@ const DoctorsScheduleModal = ({ open, setOpen }: TProps) => {
   });
 
   // create doctor schedule for doctor
-  const [createDoctorSchedule] = useCreateDoctorScheduleMutation();
+  const [createDoctorSchedule,{isLoading:loading}] = useCreateDoctorScheduleMutation();
 
   if (isLoading) {
     return "Loading..";
@@ -53,12 +54,16 @@ const DoctorsScheduleModal = ({ open, setOpen }: TProps) => {
   const schedules = data?.schedules;
 
   const onSubmit = async () => {
-    console.log("selectedScheduleIds", selectedScheduleIds);
     try {
       const res = await createDoctorSchedule({
         scheduleIds: selectedScheduleIds,
-      });
-      console.log("res", res);
+      }).unwrap();
+
+      setOpen(false);
+
+      if (res?.count > 0) {
+        toast.success("Doctors Schedule Create Successful");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -87,7 +92,7 @@ const DoctorsScheduleModal = ({ open, setOpen }: TProps) => {
           <LoadingButton
             size="small"
             onClick={onSubmit}
-            loading={false}
+            loading={loading}
             loadingIndicator="Submitting..."
             variant="contained"
           >

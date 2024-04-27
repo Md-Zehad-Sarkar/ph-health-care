@@ -100,12 +100,12 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {/* <Link href={`/dashboard/admin/profile`}> */}
+        <Link href={`/dashboard/doctor/profile`}>
           <MenuItem onClick={handleClose}>
             <Avatar sx={{ background: "transparent", color: "primary.main" }} />
             Profile
           </MenuItem>
-        {/* </Link> */}
+        </Link>
 
         <Divider />
 

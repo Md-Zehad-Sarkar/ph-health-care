@@ -3,8 +3,7 @@ import { SxProps } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Input } from "@mui/material";
-import { Controller } from "react-hook-form";
-// import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
 
 type TFileUploaderProps = {
   name: string;

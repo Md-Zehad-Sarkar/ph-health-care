@@ -3,14 +3,13 @@ import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DoctorsScheduleModal from "./components/DoctorsScheduleModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Link from "next/link";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { toast } from "sonner";
-import { useGetAllDoctorSchedulesQuery } from "@/redux/api/doctorScheduleApi";
+import {
+  useDeleteDoctorScheduleMutation,
+  useGetAllDoctorSchedulesQuery,
+} from "@/redux/api/doctorScheduleApi";
 import { dateFormatter } from "@/utls/dateFormatter";
 import dayjs from "dayjs";
-import { TSchedule } from "@/types/schedule";
 
 type TProps = {
   isOpenModal: boolean;
@@ -21,33 +20,39 @@ const DoctorSchedulesPage = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [allSchedule, setAllSchedule] = useState<any>([]);
 
+  //delete doctors schedule
+  const [deleteDoctorSchedule] = useDeleteDoctorScheduleMutation();
+
   //get doctors schedule for doctor
   const { data: doctorsSchedules, isLoading } = useGetAllDoctorSchedulesQuery(
     {}
   );
 
   const schedules = doctorsSchedules?.doctorSchedules;
-  console.log("schedules", schedules);
-  console.log("allSchedule", allSchedule);
+  // console.log(schedules);
 
   useEffect(() => {
     const updateData = schedules?.map((schedule: any, index: number) => {
+      console.log("object schedule", schedule);
       return {
         sl: index + 1,
         name: schedule?.doctor?.name,
-        id: schedule?.doctorId,
+        id: schedule?.scheduleId,
+        // id: schedule?.doctorId,
         startDate: dateFormatter(schedule?.schedule?.startDate),
-        startTime: dayjs(schedule?.startDate).format("hh:mm a"),
-        endTime: dayjs(schedule?.endDate).format("hh:mm a"),
+        startTime: dayjs(schedule?.schedule?.startDate).format("hh:mm a"),
+        endTime: dayjs(schedule?.schedule?.endDate).format("hh:mm a"),
       };
     });
     setAllSchedule(updateData);
   }, [schedules]);
 
   //need implement delete doctor schedule
-  // const handleDelete = (id) => {
-  //   console.log(id);
-  // };
+  const handleDelete = async (id: string) => {
+    // console.log("deleted id", id);
+    const res = await deleteDoctorSchedule(id);
+    console.log("res", res);
+  };
 
   const columns: GridColDef[] = [
     { field: "sl", headerName: "SL" },
@@ -63,7 +68,7 @@ const DoctorSchedulesPage = () => {
       align: "center",
       renderCell: ({ row }) => {
         return (
-          <IconButton aria-label="delete">
+          <IconButton onClick={() => handleDelete(row?.id)} aria-label="delete">
             <DeleteIcon sx={{ color: "red" }} />
           </IconButton>
         );

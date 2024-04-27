@@ -14,6 +14,14 @@ import PaymentIcon from "@mui/icons-material/Payment";
 export const drawerMenuItems = (role: TUserRole) => {
   const roleMenus: IDrawerItem[] = [];
 
+  const defaultMenuItem = [
+    {
+      title: "Profile",
+      path: `${role}/profile`,
+      icon: GroupIcon,
+    },
+  ];
+
   switch (role) {
     case UserRole.SUPER_ADMIN:
       roleMenus.push(
@@ -60,12 +68,7 @@ export const drawerMenuItems = (role: TUserRole) => {
           title: "Reviews",
           path: `${role}/reviews`,
           icon: ReviewsIcon,
-        },
-        // {
-        //   title: "Profile",
-        //   path: `${role}/profile`,
-        //   icon: GroupIcon,
-        // }
+        }
       );
 
       break;
@@ -115,5 +118,5 @@ export const drawerMenuItems = (role: TUserRole) => {
     default:
       break;
   }
-  return [...roleMenus];
+  return [...roleMenus, ...defaultMenuItem];
 };
