@@ -1,4 +1,5 @@
 import { authKey } from "@/constant/authKey";
+import { setAccessTokenCookies } from "@/services/actions/setAccessTokenCookies";
 import { TGenericErrorResponse, TResponseSuccessType } from "@/types";
 import {
   getLocalStorage,
@@ -57,6 +58,8 @@ axiosInstance.interceptors.response.use(
       config.headers["Authorization"] = accessToken;
 
       setToLocalStorage(authKey, accessToken);
+      //set access token on cookies for protect route
+      setAccessTokenCookies(accessToken);
       return axiosInstance(config);
     } else {
       const errorResponseObject: TGenericErrorResponse = {

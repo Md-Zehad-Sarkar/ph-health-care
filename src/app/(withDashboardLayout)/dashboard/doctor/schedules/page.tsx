@@ -1,5 +1,12 @@
 "use client";
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Pagination,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DoctorsScheduleModal from "./components/DoctorsScheduleModal";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -22,18 +29,31 @@ const DoctorSchedulesPage = () => {
 
   //delete doctors schedule
   const [deleteDoctorSchedule] = useDeleteDoctorScheduleMutation();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+
+  //for pagination
+  let query: Record<string, any> = {};
+
+  query["page"] = page;
+  query["limit"] = limit;
 
   //get doctors schedule for doctor
-  const { data: doctorsSchedules, isLoading } = useGetAllDoctorSchedulesQuery(
-    {}
-  );
+  const { data: doctorsSchedules, isLoading } =
+    useGetAllDoctorSchedulesQuery(query);
 
   const schedules = doctorsSchedules?.doctorSchedules;
-  // console.log(schedules);
+  //for pagination data
+  const meta = doctorsSchedules?.meta;
+
+  //pagination page count
+  let pageCount: number;
+  if (meta?.total) {
+    pageCount = Math.ceil(meta?.total / limit);
+  }
 
   useEffect(() => {
     const updateData = schedules?.map((schedule: any, index: number) => {
-      console.log("object schedule", schedule);
       return {
         sl: index + 1,
         name: schedule?.doctor?.name,
@@ -51,7 +71,6 @@ const DoctorSchedulesPage = () => {
   const handleDelete = async (id: string) => {
     // console.log("deleted id", id);
     const res = await deleteDoctorSchedule(id);
-    console.log("res", res);
   };
 
   const columns: GridColDef[] = [
@@ -75,6 +94,10 @@ const DoctorSchedulesPage = () => {
       },
     },
   ];
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
   return (
     <Box>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -88,7 +111,25 @@ const DoctorSchedulesPage = () => {
       <Box my={2} mt={4}>
         {!isLoading ? (
           <Box>
-            <DataGrid rows={allSchedule ?? []} columns={columns} />
+            <DataGrid
+              rows={allSchedule ?? []}
+              columns={columns}
+              hideFooterPagination
+              slots={{
+                footer: () => {
+                  return (
+                    <Box sx={{ my: 2 }}>
+                      <Pagination
+                        color="primary"
+                        count={pageCount}
+                        page={page}
+                        onChange={handleChange}
+                      />
+                    </Box>
+                  );
+                },
+              }}
+            />
           </Box>
         ) : (
           <Typography>Loading...</Typography>

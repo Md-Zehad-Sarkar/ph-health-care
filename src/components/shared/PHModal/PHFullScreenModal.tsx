@@ -15,6 +15,7 @@ type TPHFullScreenModalProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   sx?: SxProps;
   children: React.ReactNode;
+  title?: string;
 };
 
 const Transition = React.forwardRef(function Transition(
@@ -30,6 +31,7 @@ export default function PHFullScreenModal({
   open,
   setOpen,
   children,
+  title,
   sx,
 }: TPHFullScreenModalProps) {
   const handleClose = () => {
@@ -48,7 +50,7 @@ export default function PHFullScreenModal({
         <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Create New Doctor
+              {title}
             </Typography>
             <IconButton
               edge="start"

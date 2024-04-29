@@ -30,7 +30,7 @@ const LoginPage = () => {
       const res = await loginUser(data);
       if (res?.data?.accessToken) {
         storeAuthUserInfo({ accessToken: res?.data?.accessToken });
-        router.push("/dashboard");
+        // router.push("/dashboard");
         toast.success(res.message);
       } else {
         setErrorMessage(res?.message);

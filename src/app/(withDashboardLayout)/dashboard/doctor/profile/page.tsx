@@ -3,13 +3,17 @@ import {
   useGetMYProfileQuery,
   useUpdateMYProfileMutation,
 } from "@/redux/api/myProfileApi";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import Image from "next/image";
 import DoctorsInformation from "./components/DoctorsInformation";
 import AutoFileUploader from "@/forms/AutoFileUploader";
+import ProfileUpdateModal from "./components/ProfileUpdateModal";
+import { useState } from "react";
+import EditIcon from "@mui/icons-material/Edit";
 
 const ProfilePage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: profileData, isLoading } = useGetMYProfileQuery(undefined);
   //updating profile photo
   const [updateMYProfile, { isLoading: isUpdating }] =
@@ -19,6 +23,7 @@ const ProfilePage = () => {
     return "Loading...";
   }
 
+  //image upload handler
   const onFileUploadHandler = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -26,6 +31,7 @@ const ProfilePage = () => {
 
     await updateMYProfile(formData);
   };
+
   return (
     <Container>
       <Grid container spacing={2}>
@@ -46,19 +52,29 @@ const ProfilePage = () => {
             />
           </Box>
 
-          <Box sx={{mt:'20px'}}>
+          <Box sx={{ mt: "20px" }}>
             {/* Image Uploader for updating profile picture */}
             {isUpdating ? (
               "Updating"
             ) : (
               <AutoFileUploader
-                  name="file"
-                  variant="text"
-                  onFileUpload={onFileUploadHandler}
-                  label="UpLoad Your Profile Picture"
-                  sx={{width:'100%',fontWeight:500}}
+                name="file"
+                variant="text"
+                onFileUpload={onFileUploadHandler}
+                label="UpLoad Your Profile Picture"
+                sx={{ width: "100%", fontWeight: 500 }}
               />
             )}
+          </Box>
+
+          <Box>
+            <Button
+              fullWidth
+              endIcon={<EditIcon />}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Edit Profile
+            </Button>
           </Box>
         </Grid>
 
@@ -66,6 +82,13 @@ const ProfilePage = () => {
           <DoctorsInformation profileData={profileData} />
         </Grid>
       </Grid>
+
+      {/* profile update modal */}
+      <ProfileUpdateModal
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        id={profileData?.id}
+      />
     </Container>
   );
 };
