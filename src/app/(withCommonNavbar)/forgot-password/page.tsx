@@ -8,6 +8,7 @@ import { z } from "zod";
 import KeyIcon from "@mui/icons-material/Key";
 import CheckIcon from "@mui/icons-material/Check";
 import { useForgotPasswordMutation } from "@/redux/api/authApi";
+import { toast } from "sonner";
 
 const validationSchema = z.object({
   email: z.string().email("Please enter a valid email address!"),
@@ -16,8 +17,15 @@ const validationSchema = z.object({
 const ForgotPasswordPage = () => {
   const [forgotPassword, { isSuccess }] = useForgotPasswordMutation();
 
-  const onSubmit = (email: FieldValues) => {
-    console.log(email);
+  const onSubmit = async (email: FieldValues) => {
+    try {
+      const res = await forgotPassword(email).unwrap();
+      if (res?.status) {
+        toast.success("An Email sent to your email & check the reset link");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

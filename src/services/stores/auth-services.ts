@@ -17,15 +17,17 @@ export const getAuthUserInfo = () => {
     const userInfo: any = decodeJwtToken(userAccessToken);
     return {
       ...userInfo,
-      role: userInfo?.role.toLowerCase(),
+      role: userInfo?.role?.toLowerCase(),
     };
+  } else {
+    return "";
   }
 };
 
 export const isLoggedIn = () => {
-  const authToken = getLocalStorage(authKey);
-  if (authToken) {
-    return !!authToken;
+  const token = getLocalStorage(authKey);
+  if (token) {
+    return !!token;
   }
 };
 

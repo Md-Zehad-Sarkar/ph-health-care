@@ -105,14 +105,21 @@ const LoginPage = () => {
                 </Grid>
               </Grid>
               <Typography textAlign="end">
-                <Link href="/forgot-password">Forgot password?</Link>
+                <Link
+                  href="/forgot-password"
+                  style={{ textDecoration: "underline" }}
+                >
+                  Forgot password?
+                </Link>
               </Typography>
               <Button type="submit" sx={{ margin: "10px 0px", width: "100%" }}>
                 Login
               </Button>
               <Typography>
                 Don&apos;t have an account?{" "}
-                <Link href="/register">Register</Link>
+                <Link href="/register" style={{ textDecoration: "underline" }}>
+                  Register
+                </Link>
               </Typography>
             </PHForm>
           </Box>

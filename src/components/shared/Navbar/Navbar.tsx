@@ -1,5 +1,7 @@
 "use client";
 
+import useUserInfo from "@/hooks/useUserInfo";
+import { getAuthUserInfo } from "@/services/stores/auth-services";
 import { Box, Container, Stack, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -9,6 +11,11 @@ const Navbar = () => {
     () => import("@/components/UI/AuthButton/AuthButton"),
     { ssr: false }
   );
+
+  // const userInfo = getAuthUserInfo();
+  // console.log(userInfo);
+
+  const userInfo = useUserInfo();
 
   return (
     <Container>
@@ -40,8 +47,13 @@ const Navbar = () => {
             Diagnostics
           </Typography>
           <Typography component={Link} href="/ngos">
-            NGOs
+            NGO&apos;s
           </Typography>
+          {userInfo?.userId && (
+            <Typography component={Link} href="/dashboard">
+              Dashboard
+            </Typography>
+          )}
         </Stack>
 
         <AuthButton />
