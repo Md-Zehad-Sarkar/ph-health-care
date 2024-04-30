@@ -9,6 +9,8 @@ import PHForm from "@/forms/PHForm";
 import PHInput from "@/forms/PHInput";
 import { useChangePasswordMutation } from "@/redux/api/authApi";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { logoutUser } from "@/services/actions/logoutUser";
 
 const validationSchema = z.object({
   oldPassword: z.string().min(6, "Must be at least 6 characters long"),
@@ -17,11 +19,13 @@ const validationSchema = z.object({
 
 const ChangePassword = () => {
   const [changePassword] = useChangePasswordMutation();
+  const router = useRouter();
 
   const onSubmit = async (values: FieldValues) => {
     try {
       const res = await changePassword(values).unwrap();
       if (res?.success === 200) {
+        logoutUser(router);
         toast.success("Password Change Successful");
       }
     } catch (error) {
