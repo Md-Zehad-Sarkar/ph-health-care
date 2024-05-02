@@ -4,14 +4,27 @@ import ScrollCategory from "@/components/UI/Doctor/ScrollCategory";
 import { Doctor } from "@/types/doctor";
 import { Box, Container } from "@mui/material";
 
-const DoctorsPage = async () => {
-  const res = await fetch("http://localhost:5000/api/v1/doctor");
+type TPropsType = {
+  searchParams: {
+    specialties: string;
+  };
+};
+
+const DoctorsPage = async ({ searchParams }: TPropsType) => {
+  let res;
+  if (searchParams?.specialties) {
+    res = await fetch(
+      `http://localhost:5000/api/v1/doctor?specialties=${searchParams?.specialties}`
+    );
+  } else {
+    res = await fetch("http://localhost:5000/api/v1/doctor");
+  }
   const { data } = await res.json();
 
   return (
     <Container>
       <Box sx={{ borderBottom: "2px dashed" }}></Box>
-      <ScrollCategory />
+      <ScrollCategory specialties={searchParams?.specialties} />
       <Box sx={{ mt: 2, p: 3, bgcolor: "secondary.light" }}>
         {data?.map((doctor: Doctor, index: number) => (
           <Box key={doctor?.id}>
