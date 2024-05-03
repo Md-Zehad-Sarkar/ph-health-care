@@ -1,10 +1,11 @@
-"use client";
+// "use client";
 
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ErrorIcon from "@mui/icons-material/Error";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface PropTypes {
   searchParams: { status: string };

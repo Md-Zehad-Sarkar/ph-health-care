@@ -45,22 +45,42 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
   let currentDate = new Date();
   const today = currentDate.toLocaleDateString("en-US", { weekday: "long" });
 
+  //get next date
+  const nextDate = new Date(currentDate);
+  nextDate.setDate(currentDate.getDate() + 1);
+  const tomorrow = nextDate.toLocaleDateString("en-US", { weekday: "long" });
+
+  // query params for next date
+  query.startDate = dayjs(nextDate)
+    .utc()
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toISOString();
+
+  query.endDate = dayjs(nextDate)
+    .utc()
+    .hour(23)
+    .minute(59)
+    .second(59)
+    .millisecond(999)
+    .toISOString();
+
+  const { data: nextDoctorSchedules, isLoading: loading } =
+    useGetAllDoctorSchedulesQuery({
+      ...query,
+    });
+
+  const schedulesOfTomorrow = nextDoctorSchedules?.doctorSchedules;
+
   const availableSlots = doctorSchedules?.filter(
     (doctor: DoctorSchedule) => !doctor.isBooked
   );
 
-  //get next date
-  // currentDate.setDate(currentDate.getDate() + 1);
-  // const tomorrow = currentDate.toISOString().split("T")[0];
-  // const tomorrowDay = currentDate.toLocaleDateString("en-US", {
-  //   weekday: "long",
-  // });
-
-  // query["startDate"] = tomorrow;
-
-  // const tomorrowAvailableSlots = doctorSchedules?.filter(
-  //   (doctor: DoctorSchedule) => !doctor.isBooked
-  // );
+  const availableNextDaySlots = schedulesOfTomorrow?.filter(
+    (doctor: DoctorSchedule) => !doctor.isBooked
+  );
 
   //create appointment api
   const [createAppointment] = useCreateAppointmentMutation();
@@ -78,6 +98,7 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
 
         if (res?.id) {
           const response = await initialPayment(res.id).unwrap();
+          console.log("response", response);
           if (response?.paymentUrl) {
             router.push(response.paymentUrl);
           }
@@ -132,22 +153,22 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
             </span>
           )}
         </Stack>
-        {/* tomorrow slot */}
-        {/* <Typography variant="h4" mb={1} mt={3} color="primary.main">
+        tomorrow slot
+        <Typography variant="h4" mb={1} mt={3} color="primary.main">
           Availability
         </Typography>
         <Typography variant="h6" fontSize={16}>
           <b>
             Tomorrow:{" "}
-            {dateFormatter(currentDate.toISOString()) + " " + tomorrowDay}
+            {dateFormatter(currentDate.toISOString()) + " " + tomorrow}
           </b>
         </Typography>
         <Stack direction="row" alignItems="center" flexWrap="wrap" gap={2}>
-          {tomorrowAvailableSlots?.length ? (
+          {availableNextDaySlots?.length ? (
             isLoading ? (
               "Loading..."
             ) : (
-              availableSlots?.map((doctorSchedule: DoctorSchedule) => {
+              availableNextDaySlots?.map((doctorSchedule: DoctorSchedule) => {
                 const formattedTimeSlot = `${getTimeIn12HourFormat(
                   doctorSchedule?.schedule?.startDate
                 )} - ${getTimeIn12HourFormat(
@@ -171,11 +192,9 @@ const DoctorScheduleSlots = ({ id }: { id: string }) => {
               })
             )
           ) : (
-            <span style={{ color: "red" }}>
-              No Schedule is Available Today!
-            </span>
+            <span style={{ color: "red" }}>No Schedule is Available!</span>
           )}
-        </Stack> */}
+        </Stack>
       </Box>
 
       <Button

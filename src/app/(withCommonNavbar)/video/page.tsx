@@ -1,3 +1,5 @@
+import VideoCall from "@/components/UI/VideoCall/VideoCall";
+
 type TProps = {
   searchParams: {
     videoCallingId: string;
@@ -5,7 +7,8 @@ type TProps = {
 };
 
 const VideoCallingPage = ({ searchParams }: TProps) => {
-  return <div>video call add here</div>;
+  const videoCallingId = searchParams?.videoCallingId;
+  return <VideoCall videoCallingId={videoCallingId} />;
 };
 
 export default VideoCallingPage;

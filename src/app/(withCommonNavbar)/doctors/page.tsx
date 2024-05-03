@@ -2,7 +2,7 @@ import DashedLine from "@/components/UI/Doctor/DashedLine";
 import DoctorCard from "@/components/UI/Doctor/DoctorCard";
 import ScrollCategory from "@/components/UI/Doctor/ScrollCategory";
 import { Doctor } from "@/types/doctor";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 type TPropsType = {
   searchParams: {
@@ -33,6 +33,11 @@ const DoctorsPage = async ({ searchParams }: TPropsType) => {
             {index === data.length - 1 ? null : <DashedLine />}
           </Box>
         ))}
+        <Box>
+          {data?.length === 0 && (
+            <Typography color={"white"}>No Specialties Available</Typography>
+          )}
+        </Box>
       </Box>
     </Container>
   );
