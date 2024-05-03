@@ -37,9 +37,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (accessToken && commonPrivateRoutes.includes(pathname)) {
+  if (
+    accessToken &&
+    (commonPrivateRoutes.includes(pathname) ||
+      commonPrivateRoutes.some((route) => pathname.startsWith(route)))
+  ) {
     return NextResponse.next();
   }
+
+  // if (accessToken && commonPrivateRoutes.includes(pathname)) {
+  //   return NextResponse.next();
+  // }
 
   // //manually private route role wise ...................
   // if (role === "ADMIN" && pathname.startsWith("/dashboard/admin")) {
